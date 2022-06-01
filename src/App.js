@@ -42,12 +42,23 @@ function App() {
       if (editableUserData.isEdit) {
         const editedData = users;
         editedData.splice(editableUserData.userIndex, 1, userData)
+
+        setUsers(editedData);
+        setEditableUserData({
+          isEdit: false,
+          userIndex: null
+        })
+
+      } else {
+        setUsers((prevState) => [...prevState, userData])
       }
 
-      setUsers((prevState) => [...prevState, userData]);
+      
       setUserData(initialValues)
     }
   }
+
+
 
   const handleCleanClick = () => setUserData(initialValues);
 
