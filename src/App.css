@@ -1,0 +1,61 @@
+.wrapper  {
+  max-width: 700px;
+  margin: 0px auto;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.wrapper-content {
+  display: flex;
+  justify-content: space-between;
+  width: 700px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin: 65px 50px;
+}
+
+input {
+  padding: 5px;
+  margin: 5px 0px;
+}
+
+
+.buttons-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 10px 0px;
+}
+
+button {
+  width: 70px;
+}
+
+table {
+  max-height: 100%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+th {
+  min-width: 100px;
+  border: 1px solid black;
+  background-color: rgb(198, 231, 119);
+  padding: 3px;
+}
+
+th:first-child {
+  min-width: 20px;
+}
+
+td {
+  border: 1px solid black;
+  padding: 4px;
+  max-width: 100px;
+  max-height: 50px;
+}
