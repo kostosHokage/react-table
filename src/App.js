@@ -1,12 +1,13 @@
 import './App.css';
-import React, { useState } from 'react';
-import { FOCUSABLE_SELECTOR } from '@testing-library/user-event/dist/utils';
+import React, { useEffect, useState } from 'react';
 
 const initialValues = {
   userName: '',
   userSurname: '',
-  userSalary: ''
+  userPhone: '',
+  userEmail: ''
 }
+
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
   })
 
 
-  const handleRemoveClick = (index) => { 
+  const handleRemoveClick = (index) => {
     setUsers(users.filter((user, userIndex) => userIndex !== index))
   }
 
@@ -32,7 +33,7 @@ function App() {
 
 
   // Заполненость полей
-  const isFieldFields = userData.userName && userData.userSurname && userData.userSalary;
+  const isFieldFields = userData.userName && userData.userSurname && userData.userPhone && userData.userEmail;
 
   const handleSubmitUser = (e) => {
     e.preventDefault();
@@ -53,7 +54,7 @@ function App() {
         setUsers((prevState) => [...prevState, userData])
       }
 
-      
+
       setUserData(initialValues)
     }
   }
@@ -62,30 +63,56 @@ function App() {
 
   const handleCleanClick = () => setUserData(initialValues);
 
+  async function getResponse() {
+    let serverResponse = await fetch('http://178.128.196.163:3000/api/records')
+    let content = await serverResponse.json()
+    
+    const items = content.map((item) => {
+      return {
+        userName: item.data.name,
+        userSurname: item.data.lastName,
+        userPhone: item.data.number,
+        userEmail: item.data.email 
+      }
+    })
+
+    setUsers(items)
+  }
+
+  useEffect(() => {
+    getResponse();
+  }, [])
+
   return (
     <div className='wrapper'>
       <div className='wrapper-content'>
         <div className='table-data'>
           <table>
+           <thead>
+           <tr>
             <th>ID</th>
             <th>User Name</th>
             <th>User Surname</th>
-            <th>User Salary</th>
+            <th>User Phone</th>
+            <th>User Email</th>
             <th>Actions</th>
+            </tr>
+           </thead>
             <tbody>
-              {users.map((userData, index) => (
-                    <tr>
-                      <td>{index + 1}</td>
-                      <td>{userData.userName}</td>
-                      <td>{userData.userSurname}</td>
-                      <td>{userData.userSalary}</td>
-                      <td>
-                        <div>
-                          <button className='edit-action' onClick={() => handleEditClick(userData, index)}>Edit</button>
-                          <button className='remove-action' onClick={() => handleRemoveClick(index)}>Remove</button>
-                        </div>
-                      </td>
-                    </tr>
+              {users.map((user, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{user.userName}</td>
+                  <td>{user.userSurname}</td>
+                  <td>{user.userPhone}</td>
+                  <td>{user.userEmail}</td>
+                  <td>
+                    <div>
+                      <button className='edit-action' onClick={() => handleEditClick(user, index)}>Edit</button>
+                      <button className='remove-action' onClick={() => handleRemoveClick(index)}>Remove</button>
+                    </div>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>
@@ -98,28 +125,37 @@ function App() {
             onChange={(e) => setUserData((prevState) => ({
               ...prevState,
               userName: e.target.value
-            }))} 
+            }))}
             // Удаление данных из инпутов после сабмита
             value={userData.userName}
-            />
+          />
 
           <input placeholder='Write your surname'
             onChange={(e) => setUserData((prevState) => ({
               ...prevState,
               userSurname: e.target.value
-            }))} 
+            }))}
             // Удаление данных из инпутов после сабмита
             value={userData.userSurname}
-            />
+          />
 
-          <input type="number" placeholder='Write your salary'
+          <input type="number" placeholder='Write your phone'
             onChange={(e) => setUserData((prevState) => ({
               ...prevState,
-              userSalary: e.target.value
-            }))} 
+              userPhone: e.target.value
+            }))}
             // Удаление данных из инпутов после сабмита
-            value={userData.userSalary}
-            />
+            value={userData.userPhone}
+          />
+
+          <input type="email" placeholder='Write your Email'
+            onChange={(e) => setUserData((prevState) => ({
+              ...prevState,
+              userEmail: e.target.value
+            }))}
+            // Удаление данных из инпутов после сабмита
+            value={userData.userEmail}
+          />
 
           <div className='buttons-wrapper'>
             <button onClick={handleCleanClick} type='reset'>Clean</button>
